@@ -3,70 +3,65 @@
 
 #include "pch.h"
 #include <iostream>
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#include <string>
-#include "Loger.h"
+#include <WS2tcpip.h>
 
-#pragma comment(lib, "Ws2_32.lib")
+// Include the Winsock library (lib) file
+#pragma comment (lib, "ws2_32.lib")
 
+// Saves us from typing std::cout << etc. etc. etc.
+using namespace std;
 
+void main(int argc, char* argv[]) // We can pass in a command line option!! 
+{
+	////////////////////////////////////////////////////////////
+	// INITIALIZE WINSOCK
+	////////////////////////////////////////////////////////////
 
-int main() {
-	loger("WINSOCK CLIENT")
+	// Structure to store the WinSock version. This is filled in
+	// on the call to WSAStartup()
+	WSADATA data;
 
-	WSADATA wsaData;
-	WSAStartup(MAKEWORD(2, 2), &wsaData);
+	// To start WinSock, the required version must be passed to
+	// WSAStartup(). This server is going to use WinSock version
+	// 2 so I create a word that will store 2 and 2 in hex i.e.
+	// 0x0202
+	WORD version = MAKEWORD(2, 2);
 
-	addrinfo hints;
-	memset(&hints, 0, sizeof(hints)); // must be nulled. Otherwise the GetAddrInfoEx function will fail with WSANO_RECOVERY.
-	hints.ai_family = AF_UNSPEC;
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_protocol = IPPROTO_TCP;
-
-	addrinfo *Results = NULL;
-
-	if (!getaddrinfo("127.0.0.1", "255", &hints, &Results)) {
-
-		loger("Ready To Create SOCKET and Connect to SERVER")
-
-		SOCKET connectSocket = INVALID_SOCKET;
-
-		connectSocket = socket(Results->ai_family, Results->ai_socktype, Results->ai_protocol);
-
-		if (connectSocket != INVALID_SOCKET) {
-			loger( "Created Socket Successfully ...connecting to server")
-
-			if (connect(connectSocket, Results->ai_addr, Results->ai_addrlen) != SOCKET_ERROR) {
-				loger("Connected To Server Successfully ")
-
-				std::string Message;
-				while (true) {
-
-					loger("Enter A Message :")
-
-					std::getline(std::cin, Message);
-
-					if (send(connectSocket, Message.c_str(), sizeof(Message), 0) != SOCKET_ERROR) {
-						loger( "MESSAGE IS SENT\n")
-					}
-				}
-			}
-		}
+	// Start WinSock
+	int wsOk = WSAStartup(version, &data);
+	if (wsOk != 0)
+	{
+		// Not ok! Get out quickly
+		cout << "Can't start Winsock! " << wsOk;
+		return;
 	}
 
+	////////////////////////////////////////////////////////////
+	// CONNECT TO THE SERVER
+	////////////////////////////////////////////////////////////
 
+	// Create a hint structure for the server
+	sockaddr_in server;
+	server.sin_family = AF_INET; // AF_INET = IPv4 addresses
+	server.sin_port = htons(54000); // Little to big endian conversion
+	inet_pton(AF_INET, "127.0.0.1", &server.sin_addr); // Convert from string to byte array
 
-	std::cin.get();
-	return 0;
+	// Socket creation, note that the socket type is datagram
+	SOCKET out = socket(AF_INET, SOCK_DGRAM, 0);
+
+	// Write out to that socket
+	//string s(argv[1]);
+	string s = "helllo";
+	int sendOk = sendto(out, s.c_str(), s.size() + 1, 0, (sockaddr*)&server, sizeof(server));
+
+	if (sendOk == SOCKET_ERROR)
+	{
+		cout << "That didn't work! " << WSAGetLastError() << endl;
+	}
+
+	// Close the socket
+	closesocket(out);
+
+	// Close down Winsock
+	WSACleanup();
 }
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
