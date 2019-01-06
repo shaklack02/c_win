@@ -1,26 +1,31 @@
 // Client.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include "pch.h"
 #include <string>
 #include <iostream>
-#include <WS2tcpip.h>
-#include "Win_sock.h"
-#include "../intermediate/Loger.h"
+#include "InitWinsock.h"
+#include "Loger.h"
 
 
+#pragma comment (lib, "ws2_32.lib")
 
-
-void main(int argc, char* argv[]) // We can pass in a command line option!! 
+int main() // We can pass in a command line option!! 
 {
-	Win_sock_client win_s_c();
+	Win_sock_client win_s_c;
 	int sendOk;
 	// Write out to that socket
 	//string s(argv[1]);
+
 	std::string str_data = "helllo";
-	sendOk = win_s_c.send_data(str_data);
+
+	if (win_s_c.Connect_Init("127.0.0.1", 555));
+	loger("Error Can't start Winsock!")
+
+		sendOk = win_s_c.send_data(str_data);
+
 	if (sendOk == SOCKET_ERROR)
 	{
-		_loger( "(That didn't work!) -> FAILD to send Data" ,WSAGetLastError())
+		_loger("FAILD to send Data", WSAGetLastError())
 	}
+	std::getchar();
 }
