@@ -24,14 +24,14 @@ Win_sock_client::~Win_sock_client()
 	loger("Diconstractor called")
 }
 
-int Win_sock_client::Connect_Init(const char *IP, const int Port)
+int Win_sock_client::Connect_Init(const char *IP, const int Port) 
 {
 
 	if (wsOk != 0)
 	{
 		// Not ok! Get out quickly
 		_loger("Can't start Winsock! ", wsOk)
-			return 0;
+			return 1;
 	}
 
 	////////////////////////////////////////////////////////////
@@ -39,11 +39,11 @@ int Win_sock_client::Connect_Init(const char *IP, const int Port)
 	////////////////////////////////////////////////////////////
 
 	server.sin_family = AF_INET; // AF_INET = IPv4 addresses
-	server.sin_port = htons(54000); // Little to big endian conversion
-	inet_pton(AF_INET, "127.0.0.1", &server.sin_addr); // Convert from string to byte array
+	server.sin_port = htons(Port); // Little to big endian conversion
+	inet_pton(AF_INET, IP, &server.sin_addr); // Convert from string to byte array
 													   // Socket creation, note that the socket type is datagram
 	out = socket(AF_INET, SOCK_DGRAM, 0);
-	return 1;
+	return 0;
 }
 
 int Win_sock_client::send_data(std::string str_data)
@@ -56,4 +56,5 @@ int Win_sock_client::send_data(std::string str_data)
 	}
 
 	return sendto(out, str_data.c_str(), str_data.size() + 1, 0, (sockaddr*)&server, sizeof(server));
+	
 }
