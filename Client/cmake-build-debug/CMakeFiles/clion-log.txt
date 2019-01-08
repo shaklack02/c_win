@@ -1,0 +1,30 @@
+"E:\Program Files\JetBrains\CLion 2018.3.2\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - NMake Makefiles" E:\Git_rep\c_win\Client
+-- The C compiler identification is MSVC 19.0.23026.0
+-- The CXX compiler identification is MSVC 19.0.23026.0
+-- Check for working C compiler: E:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/bin/cl.exe
+-- Check for working C compiler: E:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/bin/cl.exe -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: E:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/bin/cl.exe
+-- Check for working CXX compiler: E:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/bin/cl.exe -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+CMake Error at CMakeLists.txt:6 (add_executable):
+  Cannot find source file:
+
+    Server.cpp
+
+  Tried extensions .c .C .c++ .cc .cpp .cxx .cu .m .M .mm .h .hh .h++ .hm
+  .hpp .hxx .in .txx
+
+
+CMake Error at CMakeLists.txt:6 (add_executable):
+  No SOURCES given to target: Client
+
+
+-- Build files have been written to: E:/Git_rep/c_win/Client/cmake-build-debug

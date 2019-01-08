@@ -79,7 +79,7 @@ Win_sock_Server::Win_sock_Server()
 Win_sock_Server::~Win_sock_Server()
 {
 	// Close socket
-	closesocket(in);
+	closesocket(sin);
 
 	// Shutdown winsock
 	WSACleanup();
@@ -101,16 +101,15 @@ int Win_sock_Server::Server_Connect_Init(const char *IP, const int Port)
 	////////////////////////////////////////////////////////////
 
 	// Create a socket, notice that it is a user datagram socket (UDP)
-	SOCKET in = socket(AF_INET, SOCK_DGRAM, 0);
+	sin = socket(AF_INET, SOCK_DGRAM, 0);
 
-	// Create a server hint structure for the server
-	sockaddr_in serverHint;
+	// Create a server hint structure for the server	
 	serverHint.sin_addr.S_un.S_addr = ADDR_ANY; // Us any IP address available on the machine
 	serverHint.sin_family = AF_INET; // Address format is IPv4
 	serverHint.sin_port = htons(54000); // Convert from little to big endian
 
 										// Try and bind the socket to the IP and port
-	if (bind(in, (sockaddr*)&serverHint, sizeof(serverHint)) == SOCKET_ERROR)
+	if (bind(sin, (sockaddr*)&serverHint, sizeof(serverHint)) == SOCKET_ERROR)
 	{
 		_loger("Can't bind socket! ", WSAGetLastError() )
 		return 1; //Error could not Bind

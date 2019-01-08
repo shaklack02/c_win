@@ -48,7 +48,7 @@ public:
 	// Create a hint structure for the server
 	sockaddr_in serverHint;
 	// Socket creation, note that the socket type is datagram
-	SOCKET in;
+	SOCKET sin;
 
 	sockaddr_in client; // Use to hold the client information (port / ip address)
 
