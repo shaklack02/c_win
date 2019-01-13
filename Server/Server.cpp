@@ -36,7 +36,7 @@ void main()
 	char buf[1024];
 	loger("SERVER STARTED !!")
 	// Enter a loop
-	while (true)
+	while (true)	
 	{
 		ZeroMemory(&win_s_s.client, clientLength); // Clear the client structure
 		ZeroMemory(buf, 1024); // Clear the receive buffer
